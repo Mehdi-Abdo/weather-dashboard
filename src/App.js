@@ -64,7 +64,7 @@ function App() {
 		setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
 		axios
 			.get(
-				"https://api.openweathermap.org/data/2.5/weather?lat=24.7&lon=46.5&appid=495375859304beffd9af4c94d66e02fc",
+				"https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=0ae8b3707319d2a40452861ffa8055b1",
 				{
 					cancelToken: new axios.CancelToken((c) => {
 						cancelAxios = c;
@@ -120,14 +120,22 @@ function App() {
 							dir={direction}
 							style={{
 								width: "100%",
-								background: "rgb(28 52 91 / 36%)",
+								background: "#4B0082",
 								color: "white",
 								padding: "10px",
 								borderRadius: "15px",
-								boxShadow: "0px 11px 1px rgba(0,0,0,0.05)",
+								boxShadow: "0 8px 20px 0 rgba(0, 0, 0, 0.99)",
+								
 							}}
 						>
 							{/* CONTENT */}
+
+							{/* INPUT & BUTTON  */}
+							<div>
+								<label>City Name</label>
+								<input placeholder="your city name"/>
+								<button>button</button>
+							</div>
 							<div>
 								{/* CITY & TIME */}
 								<div
@@ -236,7 +244,7 @@ function App() {
 							}}
 						>
 							<Button
-								style={{ color: "white" }}
+								style={{ color: "white", borderRadius:"5px", backgroundColor:"rgb(135, 23, 145)",fontWeight:"bold", boxShadow:"0 6px 10px 0 #4B0082" }}
 								variant="text"
 								onClick={handleLanguageClick}
 							>
