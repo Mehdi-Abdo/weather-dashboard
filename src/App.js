@@ -3,6 +3,9 @@ import "./App.css";
 import Test from "./Test";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+//FOLDER
+import search_icon from '../assets/search.png'
+
 // REACT
 import { useEffect, useState } from "react";
 
@@ -131,10 +134,33 @@ function App() {
 							{/* CONTENT */}
 
 							{/* INPUT & BUTTON  */}
-							<div>
-								<label>City Name</label>
-								<input placeholder="your city name"/>
-								<button>button</button>
+							<div style={{
+								display: "flex",
+								alignItems: "center",
+								gap: 12,
+							}}>
+								<input type="text" placeholder="search"
+								style={{
+									height: 50,
+									border: "none",
+									outline: "none",
+									borderRadius: 40,
+									paddingLeft: 25,
+									color:rgb(108, 103, 103),
+									background:rgb(222, 237, 222),
+									fontSize: 18,
+    
+
+								}}/>
+								<img src="/assets/search.png "
+								style={{
+									width: 50,
+									padding:15,
+									borderRadius:"50%",
+									background:"white",
+									cursor:"pointer",
+
+								}}/>
 							</div>
 							<div>
 								{/* CITY & TIME */}
