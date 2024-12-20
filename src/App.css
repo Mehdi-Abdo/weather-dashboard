@@ -59,3 +59,18 @@ body {
 	src: url("/public/fonts/IBM/IBMPlexSansArabic-Medium.ttf");
 	font-weight: 600;
 }
+
+
+.search-input input::placeholder{
+	text-transform: none;
+	padding-left: 25px;
+	
+}
+
+.search-input .icon-Search{
+	position: absolute;
+	color: gray;
+	transform:translateX(-180px);
+	left:50%;
+}
+

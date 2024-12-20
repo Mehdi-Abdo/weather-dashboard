@@ -4,7 +4,7 @@ import Test from "./Test";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 //FOLDER
-import search_icon from '../assets/search.png'
+import search_icon from "./assets/search.png"
 
 // REACT
 import { useEffect, useState } from "react";
@@ -20,6 +20,9 @@ import axios from "axios";
 import moment from "moment";
 import "moment/min/locales";
 import { useTranslation } from "react-i18next";
+//import { grey, purple } from "@mui/material/colors";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+
 
 moment.locale("ar");
 
@@ -36,6 +39,7 @@ function App() {
 
 	// ======== STATES ========= //
 	const [dateAndTime, setDateAndTime] = useState("");
+	const [CityChoosen, setCityChoosen] = useState("RABAT");
 	const [temp, setTemp] = useState({
 		number: null,
 		description: "",
@@ -43,12 +47,17 @@ function App() {
 		max: null,
 		icon: null,
 	});
+
+
 	const [locale, setLocale] = useState("ar");
 
-	const direction = locale == "ar" ? "rtl" : "ltr";
+	const direction = locale === "ar" ? "rtl" : "ltr";
 	// ======== EVENT HANDLERS ========= //
+	function handleChangeCity(e){
+		setCityChoosen(e.target.value)
+	}
 	function handleLanguageClick() {
-		if (locale == "en") {
+		if (locale === "en") {
 			setLocale("ar");
 			i18n.changeLanguage("ar");
 			moment.locale("ar");
@@ -60,14 +69,11 @@ function App() {
 
 		setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
 	}
-	useEffect(() => {
-		i18n.changeLanguage(locale);
-	}, []);
-	useEffect(() => {
-		setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
+
+	function handleClick(){
 		axios
 			.get(
-				"https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=0ae8b3707319d2a40452861ffa8055b1",
+				`https://api.openweathermap.org/data/2.5/weather?q=${CityChoosen}&appid=0ae8b3707319d2a40452861ffa8055b1&lang=ar`,
 				{
 					cancelToken: new axios.CancelToken((c) => {
 						cancelAxios = c;
@@ -83,9 +89,12 @@ function App() {
 				const max = Math.round(response.data.main.temp_max - 272.15);
 				const description = response.data.weather[0].description;
 				const responseIcon = response.data.weather[0].icon;
+				const cityApi = response.data.name;
+				console.log(cityApi);
 
 				setTemp({
 					number: responseTemp,
+					cityApi:cityApi,
 					min: min,
 					max: max,
 					description: description,
@@ -99,11 +108,22 @@ function App() {
 				console.log(error);
 			});
 
+			
+
 		return () => {
 			console.log("canceling");
 			cancelAxios();
 		};
+	} 
+	useEffect(() => {
+		handleClick()
+		 setCityChoosen("")
+		i18n.changeLanguage(locale);
 	}, []);
+	useEffect(() => {
+		setDateAndTime(moment().format("MMMM Do YYYY, h:mm:ss a"));
+		
+	}, [CityChoosen]);
 	return (
 		<div className="App">
 			<ThemeProvider theme={theme}>
@@ -134,34 +154,44 @@ function App() {
 							{/* CONTENT */}
 
 							{/* INPUT & BUTTON  */}
-							<div style={{
+							<div className="search-input" style={{
+								position:"relative",
 								display: "flex",
 								alignItems: "center",
+								justifyContent: "center",
 								gap: 12,
+								marginBottom:30,
+								
 							}}>
-								<input type="text" placeholder="search"
+								<input type="text" placeholder="City Name"  value={CityChoosen} onChange={handleChangeCity}
 								style={{
+									paddingRight:30,
 									height: 50,
-									border: "none",
-									outline: "none",
-									borderRadius: 40,
-									paddingLeft: 25,
-									color:rgb(108, 103, 103),
-									background:rgb(222, 237, 222),
-									fontSize: 18,
+									width:"50%",
+									borderRadius:8,
+									background:"rgba(255 255 255 0.05)",
+									border: "1 solid rgba(255 255 255 0.25)",
+                                    color:"rgb(135, 23, 145)",
+									textTransform:"uppercase",
+									boxShadow: "0 8px 10px 0 rgba(44, 42, 42, 0.99)",
+								    borderStyle:"3px",
+									paddingLeft: 50,
+									paddingRight: 50,
+							        fontSize: 18,
     
-
 								}}/>
-								<img src="/assets/search.png "
-								style={{
-									width: 50,
-									padding:15,
-									borderRadius:"50%",
-									background:"white",
+								   
+                                   <SearchOutlinedIcon className="icon-Search" onClick={handleClick}  style={{
+									
+									borderRadius:50,
+									background:"none",
 									cursor:"pointer",
-
-								}}/>
+									fontSize:50,
+								
+								   }}/> 
+                                   
 							</div>
+							
 							<div>
 								{/* CITY & TIME */}
 								<div
@@ -179,7 +209,7 @@ function App() {
 											fontWeight: "600",
 										}}
 									>
-										{t("Riyadh")}
+										{temp.cityApi}
 									</Typography>
 
 									<Typography
